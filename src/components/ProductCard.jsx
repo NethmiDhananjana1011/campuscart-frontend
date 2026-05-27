@@ -3,45 +3,40 @@ import { ShoppingCart, Tag, Trash2 } from 'lucide-react';
 
 /**
  * ProductCard Component
- * Displays individual product details including images from the backend
+ * Renders a single product with image support from backend
  */
 const ProductCard = ({ product, onDelete }) => {
-  // Construct the full image URL pointing to our backend uploads folder
+  // Construct image URL from backend storage
   const imageUrl = product.image 
     ? `http://localhost:5000${product.image}` 
     : 'https://via.placeholder.com/300';
 
   return (
-    <div className="bg-white rounded-3xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-md transition-shadow group">
-      {/* Product Image */}
-      <div className="h-48 overflow-hidden bg-gray-100 relative">
+    <div className="bg-white rounded-2xl overflow-hidden border border-gray-200 shadow-sm transition-all hover:shadow-md">
+      <div className="h-40 bg-gray-100 relative">
         <img 
           src={imageUrl} 
           alt={product.name} 
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          className="w-full h-full object-cover"
         />
-        <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full flex items-center gap-1 shadow-sm">
-          <Tag size={14} className="text-purple-600" />
-          <span className="text-xs font-bold text-gray-700">{product.category}</span>
-        </div>
+        <span className="absolute top-2 right-2 bg-purple-600 text-white text-[10px] px-2 py-1 rounded-full font-bold uppercase">
+          {product.category}
+        </span>
       </div>
 
-      {/* Product Details */}
-      <div className="p-5">
-        <h3 className="text-lg font-bold text-gray-800 mb-1">{product.name}</h3>
-        <p className="text-purple-600 font-black text-xl mb-3">LKR {product.price}</p>
-        <p className="text-gray-500 text-sm line-clamp-2 mb-4">{product.description}</p>
+      <div className="p-4">
+        <h3 className="font-bold text-gray-800 text-sm truncate">{product.name}</h3>
+        <p className="text-purple-600 font-black text-lg">LKR {product.price}</p>
         
-        <div className="flex gap-2">
-          <button className="flex-1 bg-gray-900 text-white py-2.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2 hover:bg-black transition-colors">
-            <ShoppingCart size={16} /> Buy Now
+        <div className="mt-3 flex gap-2">
+          <button className="flex-1 bg-gray-900 text-white py-2 rounded-lg text-xs font-bold flex items-center justify-center gap-2 hover:bg-black transition-colors">
+            <ShoppingCart size={14} /> Buy
           </button>
           <button 
             onClick={() => onDelete(product._id)}
-            className="p-2.5 rounded-xl bg-red-50 text-red-500 hover:bg-red-100 transition-colors"
-            title="Delete Product"
+            className="p-2 rounded-lg bg-red-50 text-red-500 hover:bg-red-100 transition-colors"
           >
-            <Trash2 size={18} />
+            <Trash2 size={16} />
           </button>
         </div>
       </div>
