@@ -1,19 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { ShoppingBag, PlusCircle, LayoutGrid } from 'lucide-react';
-import ProductCard from '../components/ProductCard'; // Import from components folder
+import { ShoppingBag, PlusCircle, LayoutGrid, Search } from 'lucide-react'; // Added Search icon
+import ProductCard from '../components/ProductCard';
 
-/**
- * Home Component
- * Main landing page that displays the product store and add item form
- */
 const Home = () => {
   const [message, setMessage] = useState('');
   const [products, setProducts] = useState([]);
+  const [searchQuery, setSearchQuery] = useState(''); // New search state
   const [file, setFile] = useState(null);
   const [formData, setFormData] = useState({ name: '', price: '', description: '', category: 'Books' });
 
-  // Check backend status and fetch initial products
   useEffect(() => {
     axios.get('http://localhost:5000/')
       .then(res => setMessage(res.data))
@@ -26,6 +22,12 @@ const Home = () => {
       .then(res => setProducts(res.data))
       .catch(err => console.error(err));
   };
+
+  // Logic to filter products based on search query
+  const filteredProducts = products.filter(product => 
+    product.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+    product.category.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
@@ -90,20 +92,33 @@ const Home = () => {
 
       {/* PRODUCT DISPLAY SECTION */}
       <div className="lg:col-span-2">
+        {/* New Search Bar Section */}
+        <div className="mb-6 relative">
+          <Search className="absolute left-4 top-3.5 text-gray-400" size={20} />
+          <input 
+            type="text"
+            placeholder="Search products by name or category..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full p-3 pl-12 bg-white rounded-2xl border border-gray-100 shadow-sm outline-none focus:ring-2 focus:ring-purple-500 transition-all"
+          />
+        </div>
+
         <h2 className="text-xl font-bold mb-6 flex items-center gap-2 text-gray-800">
            <LayoutGrid size={20} className="text-purple-600" /> Campus Store Feed
         </h2>
         
-        {products.length > 0 ? (
+        {filteredProducts.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            {products.map((p) => (
+            {/* Using filteredProducts instead of products */}
+            {filteredProducts.map((p) => (
               <ProductCard key={p._id} product={p} onDelete={handleDelete} />
             ))}
           </div>
         ) : (
           <div className="text-center py-20 bg-white rounded-3xl border border-dashed border-gray-200">
             <ShoppingBag className="mx-auto text-gray-200 mb-4" size={48} />
-            <p className="text-gray-400 font-medium">No products listed yet.</p>
+            <p className="text-gray-400 font-medium">No results found for "{searchQuery}"</p>
           </div>
         )}
       </div>
