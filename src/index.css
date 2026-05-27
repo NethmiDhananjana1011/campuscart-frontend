@@ -1,47 +1,22 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-:root {
-  /* Oyage original colors tika save karagaththa */
-  --bg: #fff;
-  --text: #6b6375;
-  --text-h: #08060d;
-  --accent: #aa3bff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  
-  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
-  background-color: var(--bg);
-  color: var(--text);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #16171d;
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-  }
-}
-
+/* In v4, the @apply directive works directly with the imported theme */
 body {
-  margin: 0;
-  min-height: 100vh;
+  @apply bg-gray-50 text-gray-700 antialiased;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
-/* Vite default eke thibba fixed width (#root) eka ain kala 
-   dan tailwind container classes use karanna puluwan */
 #root {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
-/* Headers walata lassanata colors set wenna haduwa */
-h1, h2, h3, h4 {
-  color: var(--text-h);
-  font-weight: 600;
+/* Custom utility classes in v4 */
+@utility input-field {
+  @apply w-full p-3 bg-gray-50 rounded-xl border-none outline-none focus:ring-2 focus:ring-purple-500 transition-all;
+}
+
+@utility btn-primary {
+  @apply bg-purple-600 text-white py-3 px-6 rounded-xl font-bold hover:bg-purple-700 shadow-lg shadow-purple-100 transition-all active:scale-95 flex items-center justify-center gap-2;
 }
