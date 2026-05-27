@@ -1,32 +1,55 @@
 import React from 'react';
-import { ShoppingCart, Search, User, Menu } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { ShoppingBag, LogOut, User as UserIcon } from 'lucide-react';
 
 const Navbar = () => {
+  const navigate = useNavigate();
+  // Browser eke save wela thiyena user info gannawa
+  const user = JSON.parse(localStorage.getItem('campusUser'));
+
+  const handleLogout = () => {
+    localStorage.removeItem('campusUser'); // Session eka delete karanawa
+    navigate('/login');
+    window.location.reload(); // Navbar eka refresh wenna
+  };
+
   return (
-    <nav className="bg-white/80 backdrop-blur-md border-b border-gray-200 py-3 px-6 flex items-center justify-between sticky top-0 z-50">
-      <div className="flex items-center gap-2">
-        <div className="bg-purple-600 p-2 rounded-lg shadow-lg shadow-purple-200">
-          <ShoppingCart className="text-white" size={20} />
+    <nav className="bg-white border-b border-gray-100 py-4 px-6 sticky top-0 z-50">
+      <div className="max-w-6xl mx-auto flex justify-between items-center">
+        <Link to="/" className="text-2xl font-black text-gray-900 flex items-center gap-2">
+          <div className="bg-purple-600 p-1.5 rounded-lg text-white">
+            <ShoppingBag size={20} />
+          </div>
+          Campus<span className="text-purple-600">Cart</span>
+        </Link>
+        
+        <div className="flex items-center gap-6 text-sm font-bold text-gray-600">
+          <Link to="/" className="hover:text-purple-600 transition-colors">Store Feed</Link>
+          
+          {user ? (
+            // User login wela nam meka pennanawa
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2 text-purple-600 bg-purple-50 px-3 py-1.5 rounded-full">
+                <UserIcon size={16} />
+                <span>{user.result.username}</span>
+              </div>
+              <button 
+                onClick={handleLogout}
+                className="flex items-center gap-2 text-red-500 hover:text-red-600 transition-colors"
+              >
+                <LogOut size={18} /> Logout
+              </button>
+            </div>
+          ) : (
+            // User login wela nathi nam meka pennanawa
+            <div className="flex items-center gap-4">
+              <Link to="/register" className="hover:text-purple-600 transition-colors">Register</Link>
+              <Link to="/login" className="bg-purple-600 text-white px-5 py-2 rounded-xl hover:bg-purple-700 transition-all shadow-lg shadow-purple-100">
+                Login
+              </Link>
+            </div>
+          )}
         </div>
-        <span className="text-xl font-bold text-gray-800 tracking-tight">CampusCart</span>
-      </div>
-
-      <div className="hidden md:flex flex-1 mx-8 relative">
-        <input 
-          type="text" 
-          placeholder="Search products..." 
-          className="w-full bg-gray-100 border-none rounded-xl py-2 px-4 pl-11 focus:ring-2 focus:ring-purple-500 outline-none transition-all text-sm"
-        />
-        <Search className="absolute left-4 top-2.5 text-gray-400" size={18} />
-      </div>
-
-      <div className="flex items-center gap-5 text-gray-600">
-        <User className="hover:text-purple-600 cursor-pointer transition-colors" size={22} />
-        <div className="relative hover:text-purple-600 cursor-pointer transition-colors">
-          <ShoppingCart size={22} />
-          <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center">0</span>
-        </div>
-        <Menu className="md:hidden" size={22} />
       </div>
     </nav>
   );
