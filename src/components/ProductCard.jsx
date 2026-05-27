@@ -1,34 +1,47 @@
 import React from 'react';
-import { ShoppingCart, Tag } from 'lucide-react';
-import ProductCard from './components/ProductCard';
+import { ShoppingCart, Tag, Trash2 } from 'lucide-react';
 
-const ProductCard = ({ product }) => {
+/**
+ * ProductCard Component
+ * Displays individual product details including images from the backend
+ */
+const ProductCard = ({ product, onDelete }) => {
+  // Construct the full image URL pointing to our backend uploads folder
+  const imageUrl = product.image 
+    ? `http://localhost:5000${product.image}` 
+    : 'https://via.placeholder.com/300';
+
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 group">
-      {/* Product Image Placeholder */}
-      <div className="h-48 bg-purple-50 flex items-center justify-center group-hover:bg-purple-100 transition-colors">
-        <ShoppingCart size={48} className="text-purple-200 group-hover:text-purple-300" />
+    <div className="bg-white rounded-3xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-md transition-shadow group">
+      {/* Product Image */}
+      <div className="h-48 overflow-hidden bg-gray-100 relative">
+        <img 
+          src={imageUrl} 
+          alt={product.name} 
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+        />
+        <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full flex items-center gap-1 shadow-sm">
+          <Tag size={14} className="text-purple-600" />
+          <span className="text-xs font-bold text-gray-700">{product.category}</span>
+        </div>
       </div>
 
+      {/* Product Details */}
       <div className="p-5">
-        <div className="flex justify-between items-start mb-2">
-          <h3 className="font-bold text-gray-800 text-lg leading-tight">{product.name}</h3>
-          <span className="bg-purple-100 text-purple-600 text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider">
-            {product.category}
-          </span>
-        </div>
+        <h3 className="text-lg font-bold text-gray-800 mb-1">{product.name}</h3>
+        <p className="text-purple-600 font-black text-xl mb-3">LKR {product.price}</p>
+        <p className="text-gray-500 text-sm line-clamp-2 mb-4">{product.description}</p>
         
-        <p className="text-gray-500 text-sm mb-4 line-clamp-2 italic">
-          {product.description || "No description available for this item."}
-        </p>
-
-        <div className="flex items-center justify-between mt-auto">
-          <div>
-            <p className="text-xs text-gray-400 font-medium uppercase">Price</p>
-            <p className="text-xl font-black text-purple-600">Rs. {product.price}</p>
-          </div>
-          <button className="bg-purple-600 text-white p-3 rounded-xl hover:bg-purple-700 shadow-lg shadow-purple-100 transition-all active:scale-95">
-            <ShoppingCart size={20} />
+        <div className="flex gap-2">
+          <button className="flex-1 bg-gray-900 text-white py-2.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2 hover:bg-black transition-colors">
+            <ShoppingCart size={16} /> Buy Now
+          </button>
+          <button 
+            onClick={() => onDelete(product._id)}
+            className="p-2.5 rounded-xl bg-red-50 text-red-500 hover:bg-red-100 transition-colors"
+            title="Delete Product"
+          >
+            <Trash2 size={18} />
           </button>
         </div>
       </div>
