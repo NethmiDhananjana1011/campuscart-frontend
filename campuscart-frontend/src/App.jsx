@@ -3,16 +3,22 @@ import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import AddProduct from './pages/AddProduct';
 import Login from './pages/Login';
+import Register from './pages/Register';
 
 function App() {
   return (
     <Router>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/add" element={<AddProduct />} />
-        <Route path="/login" element={<Login />} />
-      </Routes>
+      <div className="min-h-screen bg-slate-50 flex flex-col">
+        <Navbar />
+        <main className="flex-1">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/add" element={<AddProduct />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+          </Routes>
+        </main>
+      </div>
     </Router>
   );
 }
